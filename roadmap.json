@@ -1,7 +1,7 @@
 {
     "projectName": "Cloudy Road (NYC) - Web MVP",
     "lastUpdated": "2026-01-22",
-    "status": "Phase 1 Initialization",
+    "status": "Phase 1 In Progress",
     "techStack": {
       "frontend": "Next.js 14 (App Router), Tailwind CSS, React-Map-GL",
       "backend": "Supabase (Auth, Database, Edge Functions)",
@@ -30,7 +30,7 @@
                 "id": "P1_T002",
                 "title": "Setup Mapbox Keys",
                 "description": "Acquire Public Token (Frontend) and Secret Token (Backend/Matching) from Mapbox. Add to .env.local.",
-                "status": "Not Started",
+                "status": "Done",
                 "priority": "Critical",
                 "owner": "Backend",
                 "dependencies": []
@@ -48,13 +48,13 @@
           },
           {
             "epicTitle": "Map & Cloud Rendering",
-            "epicStatus": "Not Started",
+            "epicStatus": "In Progress",
             "tasks": [
               {
                 "id": "P1_T004",
                 "title": "Render Base Map (react-map-gl)",
                 "description": "Create 'BoroughMap' component. Render Mapbox dark-v11 style. Ensure full-screen rendering in Next.js layout.",
-                "status": "Not Started",
+                "status": "Done",
                 "priority": "High",
                 "owner": "Frontend",
                 "dependencies": ["P1_T001", "P1_T002"]
@@ -63,7 +63,7 @@
                 "id": "P1_T005",
                 "title": "Auto-Zoom to Borough (Turf.js)",
                 "description": "Implement @turf/bbox logic to automatically calculate bounds of the borough GeoJSON and snap the camera to it on load.",
-                "status": "Not Started",
+                "status": "Done",
                 "priority": "High",
                 "owner": "Frontend",
                 "dependencies": ["P1_T004"]
