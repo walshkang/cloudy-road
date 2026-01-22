@@ -1,0 +1,116 @@
+{
+    "projectName": "Cloudy Road (NYC) - Web MVP",
+    "lastUpdated": "2026-01-22",
+    "status": "Phase 1 Initialization",
+    "techStack": {
+      "frontend": "Next.js 14 (App Router), Tailwind CSS, React-Map-GL",
+      "backend": "Supabase (Auth, Database, Edge Functions)",
+      "maps": "Mapbox GL JS, Turf.js"
+    },
+    "phases": [
+      {
+        "phaseName": "Phase 1: The 'Solo Explorer' MVP",
+        "phaseStatus": "In Progress",
+        "description": "Build the core 'dopamine loop' (Upload GPX -> Clear the Clouds) for a single user on the Web.",
+        "epics": [
+          {
+            "epicTitle": "Project Setup & Core Infrastructure",
+            "epicStatus": "In Progress",
+            "tasks": [
+              {
+                "id": "P1_T001",
+                "title": "Initialize Next.js App",
+                "description": "Scaffold Next.js 14+ project with TypeScript and Tailwind CSS.",
+                "status": "Done",
+                "priority": "Critical",
+                "owner": "Frontend",
+                "dependencies": []
+              },
+              {
+                "id": "P1_T002",
+                "title": "Setup Mapbox Keys",
+                "description": "Acquire Public Token (Frontend) and Secret Token (Backend/Matching) from Mapbox. Add to .env.local.",
+                "status": "Not Started",
+                "priority": "Critical",
+                "owner": "Backend",
+                "dependencies": []
+              },
+              {
+                "id": "P1_T003",
+                "title": "Setup Supabase Project",
+                "description": "Initialize Supabase project. Enable PostGIS extension. Enable Auth (Google/Magic Link).",
+                "status": "Not Started",
+                "priority": "Critical",
+                "owner": "Backend",
+                "dependencies": []
+              }
+            ]
+          },
+          {
+            "epicTitle": "Map & Cloud Rendering",
+            "epicStatus": "Not Started",
+            "tasks": [
+              {
+                "id": "P1_T004",
+                "title": "Render Base Map (react-map-gl)",
+                "description": "Create 'BoroughMap' component. Render Mapbox dark-v11 style. Ensure full-screen rendering in Next.js layout.",
+                "status": "Not Started",
+                "priority": "High",
+                "owner": "Frontend",
+                "dependencies": ["P1_T001", "P1_T002"]
+              },
+              {
+                "id": "P1_T005",
+                "title": "Auto-Zoom to Borough (Turf.js)",
+                "description": "Implement @turf/bbox logic to automatically calculate bounds of the borough GeoJSON and snap the camera to it on load.",
+                "status": "Not Started",
+                "priority": "High",
+                "owner": "Frontend",
+                "dependencies": ["P1_T004"]
+              },
+              {
+                "id": "P1_T006",
+                "title": "Fetch & Display Borough Boundary",
+                "description": "Fetch 'Brooklyn' GeoJSON from Supabase (or mock file) and render it as a colored fill layer.",
+                "status": "Not Started",
+                "priority": "High",
+                "owner": "Frontend",
+                "dependencies": ["P1_T005"]
+              }
+            ]
+          },
+          {
+            "epicTitle": "Activity Pipeline (The Loop)",
+            "epicStatus": "Not Started",
+            "tasks": [
+              {
+                "id": "P1_T007",
+                "title": "GPX Drag-and-Drop UI",
+                "description": "Create a file upload zone over the map that accepts .gpx files.",
+                "status": "Not Started",
+                "priority": "Medium",
+                "owner": "Frontend",
+                "dependencies": ["P1_T004"]
+              },
+              {
+                "id": "P1_T008",
+                "title": "Process GPX to H3 Hexagons",
+                "description": "Backend/Edge Function: Parse GPX -> Map Match -> Convert to H3 Indices -> Upsert to DB.",
+                "status": "Not Started",
+                "priority": "High",
+                "owner": "Backend",
+                "dependencies": ["P1_T003", "P1_T007"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "phaseName": "Phase 2: Mobile & Sync",
+        "description": "Transition to automated Strava sync and potential mobile wrapper.",
+        "tasks": [
+          { "id": "P2_T001", "title": "Strava OAuth Integration" }
+        ]
+      }
+    ]
+  }
