@@ -1,11 +1,31 @@
 "use client";
 
 import { useRef, useCallback } from "react";
-import Map, { MapRef } from "react-map-gl/mapbox";
+import Map, { Layer, MapRef, Source } from "react-map-gl/mapbox";
 import bbox from "@turf/bbox";
 import type { BoroughMapProps } from "@/types/map";
+import type { Feature } from "geojson";
+import type { FillLayer, LineLayer } from "mapbox-gl";
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+
+const boroughFillLayer: FillLayer = {
+  id: "borough-fill",
+  type: "fill",
+  paint: {
+    "fill-color": "#3b82f6",
+    "fill-opacity": 0.35,
+  },
+};
+
+const boroughOutlineLayer: LineLayer = {
+  id: "borough-outline",
+  type: "line",
+  paint: {
+    "line-color": "#60a5fa",
+    "line-width": 2,
+  },
+};
 
 export default function BoroughMap({ geometry, boroughName }: BoroughMapProps) {
   const mapRef = useRef<MapRef>(null);
@@ -37,6 +57,12 @@ export default function BoroughMap({ geometry, boroughName }: BoroughMapProps) {
     );
   }
 
+  const boroughFeature: Feature = {
+    type: "Feature",
+    properties: { name: boroughName },
+    geometry,
+  };
+
   return (
     <Map
       ref={mapRef}
@@ -50,6 +76,11 @@ export default function BoroughMap({ geometry, boroughName }: BoroughMapProps) {
       mapStyle="mapbox://styles/mapbox/dark-v11"
       onLoad={onMapLoad}
       aria-label={`Map of ${boroughName}`}
-    />
+    >
+      <Source id="borough" type="geojson" data={boroughFeature}>
+        <Layer {...boroughFillLayer} />
+        <Layer {...boroughOutlineLayer} />
+      </Source>
+    </Map>
   );
 }
