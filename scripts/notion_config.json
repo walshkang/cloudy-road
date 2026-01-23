@@ -1,0 +1,13 @@
+{
+  "property_mapping": {
+    "id": "ID",
+    "title": "Task Name",
+    "status": "Status",
+    "priority": "Priority",
+    "owner": "Owner",
+    "phase": "Phase",
+    "epic": "Epic",
+    "description": "Description",
+    "dependencies": "Dependencies"
+  }
+}
