@@ -48,7 +48,7 @@
           },
           {
             "epicTitle": "Map & Cloud Rendering",
-            "epicStatus": "In Progress",
+            "epicStatus": "Done",
             "tasks": [
               {
                 "id": "P1_T004",
@@ -81,13 +81,13 @@
           },
           {
             "epicTitle": "Activity Pipeline (The Loop)",
-            "epicStatus": "Not Started",
+            "epicStatus": "In Progress",
             "tasks": [
               {
                 "id": "P1_T007",
                 "title": "GPX Drag-and-Drop UI",
-                "description": "Create a file upload zone over the map that accepts .gpx files.",
-                "status": "Not Started",
+                "description": "Drag-and-drop overlay that accepts .gpx files, parses via @tmcw/togeojson, and renders tracks as green lines on the map.",
+                "status": "Done",
                 "priority": "Medium",
                 "owner": "Frontend",
                 "dependencies": ["P1_T004"]

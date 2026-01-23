@@ -1,10 +1,9 @@
 "use client";
 
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useMemo } from "react";
 import Map, { Layer, MapRef, Source } from "react-map-gl/mapbox";
 import bbox from "@turf/bbox";
 import type { BoroughMapProps } from "@/types/map";
-import type { Feature } from "geojson";
 import type { FillLayer, LineLayer } from "mapbox-gl";
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
@@ -27,14 +26,31 @@ const boroughOutlineLayer: LineLayer = {
   },
 };
 
-export default function BoroughMap({ geometry, boroughName }: BoroughMapProps) {
+const activityLineLayer: LineLayer = {
+  id: "activity-line",
+  type: "line",
+  filter: ["any", ["==", ["geometry-type"], "LineString"], ["==", ["geometry-type"], "MultiLineString"]],
+  paint: {
+    "line-color": "#22c55e",
+    "line-width": 3,
+    "line-opacity": 0.9,
+  },
+};
+
+export default function BoroughMap({ feature, activityData }: BoroughMapProps) {
   const mapRef = useRef<MapRef>(null);
+
+  // Extract borough name from feature properties for aria-label
+  const boroughName = useMemo(() => {
+    const props = feature.properties ?? {};
+    return (props.boroname as string) || (props.name as string) || "Borough";
+  }, [feature]);
 
   const onMapLoad = useCallback(() => {
     if (!mapRef.current) return;
 
-    // Calculate bounding box from geometry using Turf.js
-    const [minLng, minLat, maxLng, maxLat] = bbox(geometry);
+    // Calculate bounding box from the feature (Turf supports GeoJSON input)
+    const [minLng, minLat, maxLng, maxLat] = bbox(feature);
 
     // Fit the map to the borough bounds
     mapRef.current.fitBounds(
@@ -47,7 +63,7 @@ export default function BoroughMap({ geometry, boroughName }: BoroughMapProps) {
         duration: 1000,
       }
     );
-  }, [geometry]);
+  }, [feature]);
 
   if (!MAPBOX_TOKEN) {
     return (
@@ -56,12 +72,6 @@ export default function BoroughMap({ geometry, boroughName }: BoroughMapProps) {
       </div>
     );
   }
-
-  const boroughFeature: Feature = {
-    type: "Feature",
-    properties: { name: boroughName },
-    geometry,
-  };
 
   return (
     <Map
@@ -77,10 +87,18 @@ export default function BoroughMap({ geometry, boroughName }: BoroughMapProps) {
       onLoad={onMapLoad}
       aria-label={`Map of ${boroughName}`}
     >
-      <Source id="borough" type="geojson" data={boroughFeature}>
+      {/* Borough boundary layer */}
+      <Source id="borough" type="geojson" data={feature}>
         <Layer {...boroughFillLayer} />
         <Layer {...boroughOutlineLayer} />
       </Source>
+
+      {/* Activity track layer (GPX data) */}
+      {activityData && (
+        <Source id="activity" type="geojson" data={activityData}>
+          <Layer {...activityLineLayer} />
+        </Source>
+      )}
     </Map>
   );
 }

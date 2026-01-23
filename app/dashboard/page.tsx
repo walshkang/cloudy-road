@@ -1,5 +1,5 @@
 import type { Feature, FeatureCollection, MultiPolygon, Polygon } from "geojson";
-import BoroughMap from "@/components/map/BoroughMap";
+import DashboardClient from "@/components/dashboard/DashboardClient";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -8,7 +8,7 @@ function isPolygonFeature(feature: Feature): feature is Feature<Polygon | MultiP
 }
 
 export default async function DashboardPage() {
-  // MVP (Option B): load GeoJSON on the server and pass the Brooklyn feature to the client map.
+  // Server Component: load GeoJSON on the server and pass the Brooklyn feature to the client.
   const boroughGeoJsonPath = path.join(
     process.cwd(),
     "data",
@@ -18,7 +18,7 @@ export default async function DashboardPage() {
   const raw = await readFile(boroughGeoJsonPath, "utf8");
   const collection = JSON.parse(raw) as FeatureCollection;
 
-  // Locate the Brooklyn feature via explicit property keys.
+  // Locate the Brooklyn feature via explicit property keys (borocode 3 = Brooklyn).
   const brooklynFeature = collection.features.find((f) => {
     const props = (f.properties ?? {}) as Record<string, unknown>;
     return props.boroname === "Brooklyn" || props.borocode === "3" || props.borocode === 3;
@@ -34,7 +34,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="h-screen w-screen">
-      <BoroughMap geometry={brooklynFeature.geometry} boroughName="Brooklyn" />
+      <DashboardClient boroughFeature={brooklynFeature} />
     </div>
   );
 }

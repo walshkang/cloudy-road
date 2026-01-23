@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.78.0",
+    "@tmcw/togeojson": "^7.1.2",
     "@turf/bbox": "^7.3.2",
     "mapbox-gl": "^3.18.1",
     "next": "16.1.4",
