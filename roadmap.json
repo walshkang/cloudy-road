@@ -30,8 +30,8 @@
             {
               "id": "P1_T003",
               "title": "Setup Supabase Project",
-              "description": "Initialize Supabase project. Enable PostGIS and Auth.",
-              "status": "Not Started",
+              "description": "Supabase project with PostGIS, Magic Link auth, cleared_hexagons table with RLS policies.",
+              "status": "Done",
               "priority": "Critical",
               "owner": "Backend",
               "dependencies": []
