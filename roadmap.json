@@ -9,7 +9,7 @@
     },
     "phases": [
       {
-        "phaseName": "Phase 1: The 'Solo Explorer' MVP",
+        "phaseName": "Phase 1: Solo Explorer MVP",
         "phaseStatus": "In Progress",
         "description": "Build the core 'dopamine loop' (Upload GPX -> Clear the Clouds) for a single user on the Web.",
         "epics": [
@@ -107,9 +107,24 @@
       },
       {
         "phaseName": "Phase 2: Mobile & Sync",
+        "phaseStatus": "Not Started",
         "description": "Transition to automated Strava sync and potential mobile wrapper.",
-        "tasks": [
-          { "id": "P2_T001", "title": "Strava OAuth Integration" }
+        "epics": [
+          {
+            "epicTitle": "Strava Integration",
+            "epicStatus": "Not Started",
+            "tasks": [
+              {
+                "id": "P2_T001",
+                "title": "Strava OAuth Integration",
+                "description": "Implement OAuth 2.0 flow for Strava API integration.",
+                "status": "Not Started",
+                "priority": "High",
+                "owner": "Backend",
+                "dependencies": []
+              }
+            ]
+          }
         ]
       }
     ]

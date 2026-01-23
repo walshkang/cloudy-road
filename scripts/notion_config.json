@@ -1,7 +1,7 @@
 {
   "property_mapping": {
     "id": "ID",
-    "title": "Task Name",
+    "title": "Task",
     "status": "Status",
     "priority": "Priority",
     "owner": "Owner",

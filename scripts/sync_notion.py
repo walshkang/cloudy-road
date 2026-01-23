@@ -18,7 +18,7 @@ DEFAULT_NOTION_ID_PROPERTY = "ID"
 # Default property mapping from roadmap fields to Notion property names
 DEFAULT_PROPERTY_MAPPING = {
     "id": "ID",
-    "title": "Task Name",
+    "title": "Task",
     "status": "Status",
     "priority": "Priority",
     "owner": "Owner",
@@ -280,7 +280,7 @@ def flatten_roadmap(roadmap_data: Dict[str, Any]) -> List[Task]:
 
                 status = (raw_task or {}).get("status", "Not Started")
                 priority = (raw_task or {}).get("priority", "Medium")
-                owner = (raw_task or {}).get("owner", "Unassigned")
+                owner = (raw_task or {}).get("owner", "Full Stack")
                 description = (raw_task or {}).get("description", "")
                 dependencies = raw_task.get("dependencies") or []
                 if not isinstance(dependencies, list):
