@@ -1,131 +1,119 @@
 {
-    "projectName": "Cloudy Road (NYC) - Web MVP",
-    "lastUpdated": "2026-01-23",
-    "status": "Phase 1 In Progress",
-    "techStack": {
-      "frontend": "Next.js 14 (App Router), Tailwind CSS, React-Map-GL",
-      "backend": "Supabase (Auth, Database, Edge Functions)",
-      "maps": "Mapbox GL JS, Turf.js"
+  "projectName": "Cloudy Road (NYC) - Web MVP",
+  "lastUpdated": "2026-01-23",
+  "phases": [
+    {
+      "phaseName": "Phase 1: Solo Explorer MVP",
+      "description": "Build the core 'dopamine loop' for a single user on the Web.",
+      "epics": [
+        {
+          "epicTitle": "Project Setup & Core Infrastructure",
+          "tasks": [
+            {
+              "id": "P1_T001",
+              "title": "Initialize Next.js App",
+              "description": "Scaffold Next.js 14+ project with TypeScript and Tailwind CSS.",
+              "status": "Done",
+              "priority": "Critical",
+              "owner": "Frontend",
+              "dependencies": []
+            },
+            {
+              "id": "P1_T002",
+              "title": "Setup Mapbox Keys",
+              "description": "Acquire Public Token and Secret Token from Mapbox.",
+              "status": "Done",
+              "priority": "Critical",
+              "owner": "Backend",
+              "dependencies": []
+            },
+            {
+              "id": "P1_T003",
+              "title": "Setup Supabase Project",
+              "description": "Initialize Supabase project. Enable PostGIS and Auth.",
+              "status": "Not Started",
+              "priority": "Critical",
+              "owner": "Backend",
+              "dependencies": []
+            }
+          ]
+        },
+        {
+          "epicTitle": "Map & Cloud Rendering",
+          "tasks": [
+            {
+              "id": "P1_T004",
+              "title": "Render Base Map (react-map-gl)",
+              "description": "Create BoroughMap component with Mapbox dark-v11 style.",
+              "status": "Done",
+              "priority": "High",
+              "owner": "Frontend",
+              "dependencies": ["P1_T001", "P1_T002"]
+            },
+            {
+              "id": "P1_T005",
+              "title": "Auto-Zoom to Borough (Turf.js)",
+              "description": "Implement @turf/bbox logic to calculate bounds and snap camera on load.",
+              "status": "Done",
+              "priority": "High",
+              "owner": "Frontend",
+              "dependencies": ["P1_T004"]
+            },
+            {
+              "id": "P1_T006",
+              "title": "Fetch & Display Borough Boundary",
+              "description": "Load Brooklyn borough boundary GeoJSON and render as fill + outline layer.",
+              "status": "Done",
+              "priority": "High",
+              "owner": "Frontend",
+              "dependencies": ["P1_T005"]
+            }
+          ]
+        },
+        {
+          "epicTitle": "Activity Pipeline (The Loop)",
+          "tasks": [
+            {
+              "id": "P1_T007",
+              "title": "GPX Drag-and-Drop UI",
+              "description": "Drag-and-drop overlay that accepts .gpx files.",
+              "status": "Done",
+              "priority": "Medium",
+              "owner": "Frontend",
+              "dependencies": ["P1_T004"]
+            },
+            {
+              "id": "P1_T008",
+              "title": "Process GPX to H3 Hexagons",
+              "description": "Backend: Parse GPX -> Map Match -> Convert to H3 -> Upsert to DB.",
+              "status": "Not Started",
+              "priority": "High",
+              "owner": "Backend",
+              "dependencies": ["P1_T003", "P1_T007"]
+            }
+          ]
+        }
+      ]
     },
-    "phases": [
-      {
-        "phaseName": "Phase 1: Solo Explorer MVP",
-        "phaseStatus": "In Progress",
-        "description": "Build the core 'dopamine loop' (Upload GPX -> Clear the Clouds) for a single user on the Web.",
-        "epics": [
-          {
-            "epicTitle": "Project Setup & Core Infrastructure",
-            "epicStatus": "In Progress",
-            "tasks": [
-              {
-                "id": "P1_T001",
-                "title": "Initialize Next.js App",
-                "description": "Scaffold Next.js 14+ project with TypeScript and Tailwind CSS.",
-                "status": "Done",
-                "priority": "Critical",
-                "owner": "Frontend",
-                "dependencies": []
-              },
-              {
-                "id": "P1_T002",
-                "title": "Setup Mapbox Keys",
-                "description": "Acquire Public Token (Frontend) and Secret Token (Backend/Matching) from Mapbox. Add to .env.local.",
-                "status": "Done",
-                "priority": "Critical",
-                "owner": "Backend",
-                "dependencies": []
-              },
-              {
-                "id": "P1_T003",
-                "title": "Setup Supabase Project",
-                "description": "Initialize Supabase project. Enable PostGIS extension. Enable Auth (Google/Magic Link).",
-                "status": "Not Started",
-                "priority": "Critical",
-                "owner": "Backend",
-                "dependencies": []
-              }
-            ]
-          },
-          {
-            "epicTitle": "Map & Cloud Rendering",
-            "epicStatus": "Done",
-            "tasks": [
-              {
-                "id": "P1_T004",
-                "title": "Render Base Map (react-map-gl)",
-                "description": "Create 'BoroughMap' component. Render Mapbox dark-v11 style. Ensure full-screen rendering in Next.js layout.",
-                "status": "Done",
-                "priority": "High",
-                "owner": "Frontend",
-                "dependencies": ["P1_T001", "P1_T002"]
-              },
-              {
-                "id": "P1_T005",
-                "title": "Auto-Zoom to Borough (Turf.js)",
-                "description": "Implement @turf/bbox logic to automatically calculate bounds of the borough GeoJSON and snap the camera to it on load.",
-                "status": "Done",
-                "priority": "High",
-                "owner": "Frontend",
-                "dependencies": ["P1_T004"]
-              },
-              {
-                "id": "P1_T006",
-                "title": "Fetch & Display Borough Boundary",
-                "description": "Load Brooklyn borough boundary from local borough boundaries GeoJSON and render it as a colored fill + outline layer on the map.",
-                "status": "Done",
-                "priority": "High",
-                "owner": "Frontend",
-                "dependencies": ["P1_T005"]
-              }
-            ]
-          },
-          {
-            "epicTitle": "Activity Pipeline (The Loop)",
-            "epicStatus": "In Progress",
-            "tasks": [
-              {
-                "id": "P1_T007",
-                "title": "GPX Drag-and-Drop UI",
-                "description": "Drag-and-drop overlay that accepts .gpx files, parses via @tmcw/togeojson, and renders tracks as green lines on the map.",
-                "status": "Done",
-                "priority": "Medium",
-                "owner": "Frontend",
-                "dependencies": ["P1_T004"]
-              },
-              {
-                "id": "P1_T008",
-                "title": "Process GPX to H3 Hexagons",
-                "description": "Backend/Edge Function: Parse GPX -> Map Match -> Convert to H3 Indices -> Upsert to DB.",
-                "status": "Not Started",
-                "priority": "High",
-                "owner": "Backend",
-                "dependencies": ["P1_T003", "P1_T007"]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "phaseName": "Phase 2: Mobile & Sync",
-        "phaseStatus": "Not Started",
-        "description": "Transition to automated Strava sync and potential mobile wrapper.",
-        "epics": [
-          {
-            "epicTitle": "Strava Integration",
-            "epicStatus": "Not Started",
-            "tasks": [
-              {
-                "id": "P2_T001",
-                "title": "Strava OAuth Integration",
-                "description": "Implement OAuth 2.0 flow for Strava API integration.",
-                "status": "Not Started",
-                "priority": "High",
-                "owner": "Backend",
-                "dependencies": []
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
+    {
+      "phaseName": "Phase 2: Mobile & Sync",
+      "description": "Transition to automated Strava sync and mobile wrapper.",
+      "epics": [
+        {
+          "epicTitle": "Project Setup & Core Infrastructure",
+          "tasks": [
+            {
+              "id": "P2_T001",
+              "title": "Strava OAuth Integration",
+              "description": "Implement Strava OAuth to automatically sync activities.",
+              "status": "Not Started",
+              "priority": "Medium",
+              "owner": "Backend",
+              "dependencies": ["P1_T003"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
