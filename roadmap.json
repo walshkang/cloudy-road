@@ -1,6 +1,6 @@
 {
     "projectName": "Cloudy Road (NYC) - Web MVP",
-    "lastUpdated": "2026-01-22",
+    "lastUpdated": "2026-01-23",
     "status": "Phase 1 In Progress",
     "techStack": {
       "frontend": "Next.js 14 (App Router), Tailwind CSS, React-Map-GL",
@@ -71,8 +71,8 @@
               {
                 "id": "P1_T006",
                 "title": "Fetch & Display Borough Boundary",
-                "description": "Fetch 'Brooklyn' GeoJSON from Supabase (or mock file) and render it as a colored fill layer.",
-                "status": "Not Started",
+                "description": "Load Brooklyn borough boundary from local borough boundaries GeoJSON and render it as a colored fill + outline layer on the map.",
+                "status": "Done",
                 "priority": "High",
                 "owner": "Frontend",
                 "dependencies": ["P1_T005"]
