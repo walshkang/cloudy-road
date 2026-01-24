@@ -1,10 +1,11 @@
 {
-  "projectName": "Cloudy Road (NYC) - Web MVP",
+  "projectName": "Cloudy Road (NYC) - AI Edition",
   "lastUpdated": "2026-01-23",
   "phases": [
     {
       "phaseName": "Phase 1: Solo Explorer MVP",
-      "description": "Build the core 'dopamine loop' for a single user on the Web.",
+      "description": "Core infrastructure: Mapbox, H3 grid system, and Supabase backend.",
+      "status": "Complete",
       "epics": [
         {
           "epicTitle": "Project Setup & Core Infrastructure",
@@ -96,16 +97,397 @@
       ]
     },
     {
-      "phaseName": "Phase 2: Mobile & Sync",
-      "description": "Transition to automated Strava sync and mobile wrapper.",
+      "phaseName": "Phase 2: The Pathfinder Agent",
+      "description": "Build the Analyst -> Scout -> Router pipeline. LLM acts as a Run Coach that picks optimal fog-clearing routes.",
+      "status": "Not Started",
       "epics": [
         {
-          "epicTitle": "Project Setup & Core Infrastructure",
+          "epicTitle": "Infrastructure Setup",
+          "tasks": [
+            {
+              "id": "P2_T000",
+              "title": "Setup LLM Provider API Keys",
+              "description": "Add OPENAI_API_KEY to .env.local. Configure fallback provider (Anthropic) if desired.",
+              "status": "Not Started",
+              "priority": "Critical",
+              "owner": "Backend",
+              "dependencies": []
+            }
+          ]
+        },
+        {
+          "epicTitle": "The Analyst (Deterministic Pre-processing)",
           "tasks": [
             {
               "id": "P2_T001",
-              "title": "Strava OAuth Integration",
-              "description": "Implement Strava OAuth to automatically sync activities.",
+              "title": "Tool: Get Uncleared Hexes",
+              "description": "Server action that queries Supabase for ALL Brooklyn H3 hexes MINUS user's cleared hexes. Returns array of H3 indices.",
+              "status": "Not Started",
+              "priority": "Critical",
+              "owner": "Backend",
+              "dependencies": ["P1_T008"]
+            },
+            {
+              "id": "P2_T002",
+              "title": "Tool: H3 Cluster Analysis (DBSCAN)",
+              "description": "Implement @turf/clusters-dbscan on uncleared hex centroids. Group into 'Fog Zones'. Return: [{id, centroid, hexCount, distanceFromUser}].",
+              "status": "Not Started",
+              "priority": "Critical",
+              "owner": "Backend",
+              "dependencies": ["P2_T001"]
+            },
+            {
+              "id": "P2_T003",
+              "title": "Tool: Mapbox Directions Wrapper",
+              "description": "Server action wrapping Mapbox Directions API. Params: start, waypoints[], end, profile='walking'. Returns: GeoJSON LineString + distance + duration + steps[].",
+              "status": "Not Started",
+              "priority": "High",
+              "owner": "Backend",
+              "dependencies": ["P1_T002"]
+            }
+          ]
+        },
+        {
+          "epicTitle": "The Scout (LLM Reasoning Layer)",
+          "tasks": [
+            {
+              "id": "P2_T004",
+              "title": "Setup Vercel AI SDK",
+              "description": "Install `ai` and `@ai-sdk/openai`. Create /api/chat route with streaming. Setup useChat hook in client.",
+              "status": "Not Started",
+              "priority": "Critical",
+              "owner": "Full Stack",
+              "dependencies": ["P2_T000"]
+            },
+            {
+              "id": "P2_T005",
+              "title": "Define Agent Tools Schema",
+              "description": "Register tools with Vercel AI SDK: get_fog_zones (calls P2_T002), calculate_route (calls P2_T003). Define Zod schemas for params.",
+              "status": "Not Started",
+              "priority": "High",
+              "owner": "Full Stack",
+              "dependencies": ["P2_T004", "P2_T002", "P2_T003"]
+            },
+            {
+              "id": "P2_T006",
+              "title": "System Prompt: Run Coach Persona",
+              "description": "Craft system prompt defining the agent's behavior: prioritize loops, favor zones within user's distance constraint, explain reasoning.",
+              "status": "Not Started",
+              "priority": "High",
+              "owner": "Full Stack",
+              "dependencies": ["P2_T005"]
+            }
+          ]
+        },
+        {
+          "epicTitle": "The Scorer (Route Quality Heuristics)",
+          "tasks": [
+            {
+              "id": "P2_T007",
+              "title": "Heuristic: Turn Counter (Flow Score)",
+              "description": "Parse Mapbox steps[]. Count maneuvers where type includes 'turn'. Return turnCount and flowPenalty = 1 - (turns / 20).",
+              "status": "Not Started",
+              "priority": "Medium",
+              "owner": "Backend",
+              "dependencies": ["P2_T003"]
+            },
+            {
+              "id": "P2_T008",
+              "title": "Heuristic: Road Class Proxy (Vibe Score)",
+              "description": "Parse Mapbox annotation.classes[]. Calculate ratio of 'path'/'pedestrian' vs 'primary'/'secondary'. Return vibeBonus = 1 + (pathRatio * 0.5).",
+              "status": "Not Started",
+              "priority": "Medium",
+              "owner": "Backend",
+              "dependencies": ["P2_T003"]
+            },
+            {
+              "id": "P2_T009",
+              "title": "Heuristic: New Hex Coverage",
+              "description": "Run proposed route through trackToH3Indices(). Compute newHexes = routeHexes - userClearedHexes. Return count and normalized ratio.",
+              "status": "Not Started",
+              "priority": "High",
+              "owner": "Backend",
+              "dependencies": ["P2_T003", "P2_T001"]
+            },
+            {
+              "id": "P2_T010",
+              "title": "Composite Scoring Function",
+              "description": "Combine heuristics: Score = newHexNorm * flowPenalty * vibeBonus. Attach score + breakdown to route response.",
+              "status": "Not Started",
+              "priority": "High",
+              "owner": "Backend",
+              "dependencies": ["P2_T007", "P2_T008", "P2_T009"]
+            }
+          ]
+        },
+        {
+          "epicTitle": "UI Integration",
+          "tasks": [
+            {
+              "id": "P2_T011",
+              "title": "Pathfinder Chat Panel",
+              "description": "Collapsible side panel with chat input. Shows streaming LLM response. Displays tool execution steps ('Analyzing fog zones...', 'Routing to Williamsburg...').",
+              "status": "Not Started",
+              "priority": "High",
+              "owner": "Frontend",
+              "dependencies": ["P2_T004"]
+            },
+            {
+              "id": "P2_T012",
+              "title": "Draft Route Visualization",
+              "description": "Render proposed route as dashed orange line on map. Show route stats overlay: distance, duration, newHexes, score breakdown.",
+              "status": "Not Started",
+              "priority": "High",
+              "owner": "Frontend",
+              "dependencies": ["P2_T011", "P2_T010"]
+            },
+            {
+              "id": "P2_T013",
+              "title": "Route Actions: Accept / Regenerate / Export",
+              "description": "Buttons to: (1) Accept route and preview hex coverage, (2) Ask agent to try again, (3) Export as GPX file for phone.",
+              "status": "Not Started",
+              "priority": "High",
+              "owner": "Frontend",
+              "dependencies": ["P2_T012"]
+            },
+            {
+              "id": "P2_T014",
+              "title": "GPX Export Utility",
+              "description": "Convert Mapbox route LineString to GPX XML format. Trigger browser download. Include route name and timestamp.",
+              "status": "Not Started",
+              "priority": "Medium",
+              "owner": "Frontend",
+              "dependencies": ["P2_T003"]
+            }
+          ]
+        },
+        {
+          "epicTitle": "Testing & Validation",
+          "tasks": [
+            {
+              "id": "P2_T015",
+              "title": "End-to-End Agent Test",
+              "description": "Manual test: Ask for '5k loop', verify agent calls tools in correct order, route renders, score displays, GPX exports.",
+              "status": "Not Started",
+              "priority": "High",
+              "owner": "QA",
+              "dependencies": ["P2_T013"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "phaseName": "Phase 3: Immersion & Polish",
+      "description": "Visual upgrades and gamification to make exploration feel rewarding.",
+      "status": "Not Started",
+      "epics": [
+        {
+          "epicTitle": "Fog of War Visual Overhaul",
+          "tasks": [
+            {
+              "id": "P3_T001",
+              "title": "Inverted Fog Layer",
+              "description": "Replace green hexes with black/gray fog mask. Use Mapbox fill-extrusion or polygon difference. Clearing hexes 'reveals' the map beneath.",
+              "status": "Not Started",
+              "priority": "High",
+              "owner": "Frontend",
+              "dependencies": ["P1_T008"]
+            },
+            {
+              "id": "P3_T002",
+              "title": "Fog Edge Glow Effect",
+              "description": "Add subtle glow/gradient at fog boundaries using Mapbox heatmap layer or custom shader. Creates 'frontier' visual.",
+              "status": "Not Started",
+              "priority": "Low",
+              "owner": "Frontend",
+              "dependencies": ["P3_T001"]
+            },
+            {
+              "id": "P3_T003",
+              "title": "3D Building Extrusion (Cleared Areas Only)",
+              "description": "Enable Mapbox 3D buildings. Filter to only show buildings in cleared hexes. Creates 'city emerging from fog' effect.",
+              "status": "Not Started",
+              "priority": "Medium",
+              "owner": "Frontend",
+              "dependencies": ["P3_T001"]
+            }
+          ]
+        },
+        {
+          "epicTitle": "Progress & Stats Dashboard",
+          "tasks": [
+            {
+              "id": "P3_T004",
+              "title": "Borough Coverage Stats",
+              "description": "Calculate and display: total hexes in Brooklyn, cleared hexes, percentage complete. Show in corner HUD.",
+              "status": "Not Started",
+              "priority": "High",
+              "owner": "Frontend",
+              "dependencies": ["P1_T008"]
+            },
+            {
+              "id": "P3_T005",
+              "title": "Activity Stats",
+              "description": "Track and display: total distance run, total activities uploaded, current streak (consecutive days with activity).",
+              "status": "Not Started",
+              "priority": "Medium",
+              "owner": "Full Stack",
+              "dependencies": ["P1_T008"]
+            },
+            {
+              "id": "P3_T006",
+              "title": "Neighborhood Progress (NTA Layer)",
+              "description": "Load NTA GeoJSON (already in data/). For each neighborhood, calculate % cleared. Show as colored overlay or list view.",
+              "status": "Not Started",
+              "priority": "Medium",
+              "owner": "Frontend",
+              "dependencies": ["P3_T004"]
+            }
+          ]
+        },
+        {
+          "epicTitle": "Gamification & Rewards",
+          "tasks": [
+            {
+              "id": "P3_T007",
+              "title": "Milestone Celebrations",
+              "description": "Trigger confetti/animation on milestones: first run, 100 hexes, 10% Brooklyn, neighborhood complete. Store milestones in Supabase.",
+              "status": "Not Started",
+              "priority": "Medium",
+              "owner": "Frontend",
+              "dependencies": ["P3_T004"]
+            },
+            {
+              "id": "P3_T008",
+              "title": "Achievement Badges",
+              "description": "Define badge criteria (Explorer: 5 neighborhoods, Night Owl: run after 8pm, etc.). Display earned badges in profile.",
+              "status": "Not Started",
+              "priority": "Low",
+              "owner": "Full Stack",
+              "dependencies": ["P3_T007"]
+            }
+          ]
+        },
+        {
+          "epicTitle": "Activity History",
+          "tasks": [
+            {
+              "id": "P3_T009",
+              "title": "Activity Log Table",
+              "description": "Supabase table: activities (id, user_id, name, date, distance, hex_count, gpx_data). Store metadata on each upload.",
+              "status": "Not Started",
+              "priority": "High",
+              "owner": "Backend",
+              "dependencies": ["P1_T008"]
+            },
+            {
+              "id": "P3_T010",
+              "title": "Activity History UI",
+              "description": "Sidebar or modal listing past activities. Click to highlight that activity's hexes on map. Option to delete activity (removes its hexes).",
+              "status": "Not Started",
+              "priority": "Medium",
+              "owner": "Frontend",
+              "dependencies": ["P3_T009"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "phaseName": "Phase 4: Automation & Integrations",
+      "description": "Remove manual friction. Auto-sync activities from fitness platforms.",
+      "status": "Not Started",
+      "epics": [
+        {
+          "epicTitle": "Strava Integration",
+          "tasks": [
+            {
+              "id": "P4_T001",
+              "title": "Strava OAuth Flow",
+              "description": "Implement Strava OAuth2. Store access_token and refresh_token in Supabase. Add 'Connect Strava' button to UI.",
+              "status": "Not Started",
+              "priority": "High",
+              "owner": "Backend",
+              "dependencies": ["P1_T003"]
+            },
+            {
+              "id": "P4_T002",
+              "title": "Strava Webhook Listener",
+              "description": "Register webhook subscription for 'activity.create' events. Create /api/webhooks/strava endpoint to receive payloads.",
+              "status": "Not Started",
+              "priority": "High",
+              "owner": "Backend",
+              "dependencies": ["P4_T001"]
+            },
+            {
+              "id": "P4_T003",
+              "title": "Auto-Ingest Strava Activity",
+              "description": "On webhook: fetch activity stream from Strava API, convert to H3, upsert to cleared_hexagons. Run in background job.",
+              "status": "Not Started",
+              "priority": "High",
+              "owner": "Backend",
+              "dependencies": ["P4_T002", "P1_T008"]
+            },
+            {
+              "id": "P4_T004",
+              "title": "Strava Historical Backfill",
+              "description": "On first connect: fetch last 30 days of activities from Strava. Process in batch. Show progress indicator.",
+              "status": "Not Started",
+              "priority": "Medium",
+              "owner": "Backend",
+              "dependencies": ["P4_T003"]
+            }
+          ]
+        },
+        {
+          "epicTitle": "Apple HealthKit Integration",
+          "tasks": [
+            {
+              "id": "P4_T005",
+              "title": "Research HealthKit Web Access",
+              "description": "Investigate options: PWA with HealthKit (limited), native wrapper (Capacitor/Expo), or manual export workaround.",
+              "status": "Not Started",
+              "priority": "Low",
+              "owner": "Research",
+              "dependencies": []
+            },
+            {
+              "id": "P4_T006",
+              "title": "HealthKit Export Instructions",
+              "description": "If no direct integration: provide in-app guide for exporting GPX from Apple Fitness and uploading to Cloudy Road.",
+              "status": "Not Started",
+              "priority": "Low",
+              "owner": "Frontend",
+              "dependencies": ["P4_T005"]
+            }
+          ]
+        },
+        {
+          "epicTitle": "Data Management",
+          "tasks": [
+            {
+              "id": "P4_T007",
+              "title": "Bulk GPX Import",
+              "description": "Allow user to upload multiple GPX files at once. Process sequentially with progress bar. Useful for historical import.",
+              "status": "Not Started",
+              "priority": "Medium",
+              "owner": "Frontend",
+              "dependencies": ["P1_T008"]
+            },
+            {
+              "id": "P4_T008",
+              "title": "Data Export (Full Backup)",
+              "description": "Export all user data: cleared hexes as GeoJSON, activity history as JSON. GDPR-friendly data portability.",
+              "status": "Not Started",
+              "priority": "Low",
+              "owner": "Backend",
+              "dependencies": ["P3_T009"]
+            },
+            {
+              "id": "P4_T009",
+              "title": "Account Deletion",
+              "description": "Full account deletion flow. Remove all user data from Supabase. Required for app store compliance.",
               "status": "Not Started",
               "priority": "Medium",
               "owner": "Backend",
