@@ -85,10 +85,10 @@
             {
               "id": "P1_T008",
               "title": "Process GPX to H3 Hexagons",
-              "description": "Backend: Parse GPX -> Map Match -> Convert to H3 -> Upsert to DB.",
-              "status": "Not Started",
+              "description": "Client-side: Parse GPX -> Interpolate gaps -> Convert to H3 (res 10) -> Upsert to Supabase -> Render cleared hexagons on map.",
+              "status": "Done",
               "priority": "High",
-              "owner": "Backend",
+              "owner": "Frontend",
               "dependencies": ["P1_T003", "P1_T007"]
             }
           ]

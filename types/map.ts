@@ -5,4 +5,6 @@ export interface BoroughMapProps {
   feature: Feature<Polygon | MultiPolygon>;
   // GPX output is a FeatureCollection (may contain multiple tracks/routes)
   activityData?: FeatureCollection | null;
+  // H3 hexagon indices that have been "cleared" by the user
+  clearedHexagons?: string[];
 }
