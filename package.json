@@ -15,6 +15,8 @@
     "@supabase/supabase-js": "^2.78.0",
     "@tmcw/togeojson": "^7.1.2",
     "@turf/bbox": "^7.3.2",
+    "@turf/center-of-mass": "^7.3.2",
+    "@turf/clusters-dbscan": "^7.3.2",
     "@turf/distance": "^7.3.2",
     "@turf/helpers": "^7.3.2",
     "h3-js": "^4.4.0",
