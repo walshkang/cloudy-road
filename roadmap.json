@@ -185,8 +185,8 @@
             {
               "id": "P2_T007",
               "title": "Heuristic: Turn Counter (Flow Score)",
-              "description": "Parse Mapbox steps[]. Count maneuvers where type includes 'turn'. Return turnCount and flowPenalty = 1 - (turns / 20).",
-              "status": "Not Started",
+              "description": "Parse Mapbox steps[]. Count turn maneuvers (turn, rotary, roundabout, end of road, new name with modifier). Calculate turn density (turns/km) and flowPenalty using NYC thresholds: < 3 turns/km = 1.0, > 12 turns/km = 0.0, linear interpolation between.",
+              "status": "Done",
               "priority": "Medium",
               "owner": "Backend",
               "dependencies": ["P2_T003"]
