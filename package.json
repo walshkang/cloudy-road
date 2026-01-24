@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "sync:notion": "python3 scripts/sync_notion.py",
-    "sync:notion:dry": "python3 scripts/sync_notion.py --dry-run"
+    "sync:notion:dry": "python3 scripts/sync_notion.py --dry-run",
+    "generate:hexes": "NODE_OPTIONS='--max-old-space-size=4096' npx tsx scripts/generate-brooklyn-hexes.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.78.0",
@@ -30,9 +31,11 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.2.3",
     "eslint": "^9",
     "eslint-config-next": "16.1.4",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

@@ -1,4 +1,4 @@
-import { latLngToCell, cellToBoundary } from "h3-js";
+import { latLngToCell, cellToBoundary, polygonToCells } from "h3-js";
 import { distance } from "@turf/distance";
 import { point } from "@turf/helpers";
 
@@ -72,6 +72,42 @@ export function extractLineCoordinates(
   }
 
   return allCoords;
+}
+
+/**
+ * Convert a GeoJSON Polygon to H3 indices.
+ * Handles outer ring + holes correctly.
+ * @param coordinates - GeoJSON Polygon coordinates [outerRing, ...holes]
+ * @param resolution - H3 resolution (default: H3_RESOLUTION)
+ */
+export function polygonToH3Indices(
+  coordinates: number[][][],
+  resolution: number = H3_RESOLUTION
+): string[] {
+  // Convert [lng, lat] (GeoJSON) to [lat, lng] (h3-js)
+  const polygon = coordinates.map((ring) =>
+    ring.map(([lng, lat]) => [lat, lng] as [number, number])
+  );
+  // false = skip expensive topology validation (assumes clean GeoJSON)
+  return polygonToCells(polygon, resolution, false);
+}
+
+/**
+ * Convert a GeoJSON MultiPolygon to H3 indices.
+ * Merges all polygons and deduplicates.
+ * @param coordinates - GeoJSON MultiPolygon coordinates
+ * @param resolution - H3 resolution (default: H3_RESOLUTION)
+ */
+export function multiPolygonToH3Indices(
+  coordinates: number[][][][],
+  resolution: number = H3_RESOLUTION
+): string[] {
+  const allIndices = new Set<string>();
+  for (const polygonCoords of coordinates) {
+    const indices = polygonToH3Indices(polygonCoords, resolution);
+    indices.forEach((idx) => allIndices.add(idx));
+  }
+  return Array.from(allIndices);
 }
 
 export { cellToBoundary };

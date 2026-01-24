@@ -1,6 +1,6 @@
 {
   "projectName": "Cloudy Road (NYC) - AI Edition",
-  "lastUpdated": "2026-01-23",
+  "lastUpdated": "2026-01-24",
   "phases": [
     {
       "phaseName": "Phase 1: Solo Explorer MVP",
@@ -99,7 +99,7 @@
     {
       "phaseName": "Phase 2: The Pathfinder Agent",
       "description": "Build the Analyst -> Scout -> Router pipeline. LLM acts as a Run Coach that picks optimal fog-clearing routes.",
-      "status": "Not Started",
+      "status": "In Progress",
       "epics": [
         {
           "epicTitle": "Infrastructure Setup",
@@ -122,7 +122,7 @@
               "id": "P2_T001",
               "title": "Tool: Get Uncleared Hexes",
               "description": "Server action that queries Supabase for ALL Brooklyn H3 hexes MINUS user's cleared hexes. Returns array of H3 indices.",
-              "status": "Not Started",
+              "status": "Done",
               "priority": "Critical",
               "owner": "Backend",
               "dependencies": ["P1_T008"]
